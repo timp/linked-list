@@ -39,23 +39,38 @@ public class LinkedList<T> {
     return count;
   }
 
+  public Node<T> findFirst(T v) {
+    Node<T> currentNode = first;
+    while (currentNode != null) {
+      if (currentNode.value == null) {
+        if (v == null) {
+          break;
+        }
+      } else {
+        if (currentNode.value.equals(v)) {
+          break;
+        }
+      }
+      currentNode = currentNode.next;
+    }
+    return currentNode;
+  }
+
   /**
    * If the value is not found nothing is done.
    */
   public LinkedList<T> removeFirstOccurrence(T value) {
-    if (first != null) {
-      Node found = first.findFirst(value);
-      if (found != null) {
-        count--;
-        Node previous = found.previous;
-        if (found.next != null) {
-          found.next.previous = previous;
-        }
-        if (previous == null) {
-          first = found.next;
-        } else {
-          previous.next = found.next;
-        }
+    Node found = findFirst(value);
+    if (found != null) {
+      count--;
+      Node previous = found.previous;
+      if (found.next != null) {
+        found.next.previous = previous;
+      }
+      if (previous == null) {
+        first = found.next;
+      } else {
+        previous.next = found.next;
       }
     }
     return this;
@@ -74,23 +89,6 @@ public class LinkedList<T> {
     public T value;
     public Node<T> next;
     public Node<T> previous;
-
-    private Node<T> findFirst(T v) {
-      if (value == null) {
-        if (v == null) {
-          return this;
-        }
-      } else {
-        if (value.equals(v)) {
-          return this;
-        }
-      }
-      if (next == null) {
-        return null;
-      } else {
-        return next.findFirst(v);
-      }
-    }
 
     public Node<T> last() {
       if (this.next == null) {
